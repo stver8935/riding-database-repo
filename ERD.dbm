@@ -4,7 +4,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
 <dbmodel pgmodeler-ver="1.2.0-alpha" use-changelog="false" max-obj-count="37"
-	 last-position="-17,-21" last-zoom="0.6" scene-rect="-28,-41,7662.67,3033.12"
+	 last-position="506,960" last-zoom="0.95" scene-rect="-28,-41,7662.67,3033.12"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -70,7 +70,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="refresh_token">
 		<type name="character varying" length="255"/>
 	</column>
-	<column name="role" not-null="true">
+	<column name="role" not-null="true" default-value="USER">
 		<type name="character varying" length="255"/>
 		<comment> <![CDATA[유저 권한]]> </comment>
 	</column>
@@ -90,7 +90,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="user_role">
 		<type name="character varying" length="255"/>
 	</column>
-	<column name="user_status_code" not-null="true">
+	<column name="user_status_code" not-null="true" default-value="0">
 		<type name="character varying" length="255"/>
 	</column>
 	<constraint name="users_pk" type="pk-constr" table="public.users">
