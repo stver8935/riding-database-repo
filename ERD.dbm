@@ -4,7 +4,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
 <dbmodel pgmodeler-ver="1.2.0-alpha" use-changelog="false" max-obj-count="37"
-	 last-position="506,960" last-zoom="0.95" scene-rect="-28,-41,7662.67,3033.12"
+	 last-position="1533,-39" last-zoom="0.95" scene-rect="-28,-41,7662.67,3033.12"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -56,7 +56,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="user_name" not-null="true">
 		<type name="character varying" length="255"/>
 	</column>
-	<column name="created_at">
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 	</column>
 	<column name="login_fail_count" not-null="true" default-value="0">
@@ -90,7 +90,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="user_role">
 		<type name="character varying" length="255"/>
 	</column>
-	<column name="user_status_code" not-null="true" default-value="0">
+	<column name="user_status_code" default-value="0">
 		<type name="character varying" length="255"/>
 	</column>
 	<constraint name="users_pk" type="pk-constr" table="public.users">
@@ -112,7 +112,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 </sequence>
 
-<table name="bedge" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+<table name="bedge" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="1780" y="120"/>
@@ -127,12 +127,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="text" length="0"/>
 		<comment> <![CDATA[user bedge description]]> </comment>
 	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
 	<constraint name="bedge_pk" type="pk-constr" table="public.bedge">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="user_bedge" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+<table name="user_bedge" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="1820" y="480"/>
@@ -147,6 +150,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="id_bedge">
 		<type name="integer" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
 	</column>
 	<constraint name="user_bedge_pk" type="pk-constr" table="public.user_bedge">
 		<columns names="fk_user_id,fk_bedge_id,id_users" ref-type="src-columns"/>
@@ -428,7 +434,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id_users">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="created_at" not-null="true">
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 		<comment> <![CDATA[생성 날짜]]> </comment>
 	</column>
@@ -458,7 +464,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="real" length="0"/>
 		<comment> <![CDATA[해당 좌표점 고도]]> </comment>
 	</column>
-	<column name="created_at" not-null="true">
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 	</column>
 	<column name="id_bicycle_track" not-null="true">
@@ -474,7 +480,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 </sequence>
 
-<table name="bicycle_track" layers="0" collapse-mode="2" max-obj-count="7" z-value="0">
+<table name="bicycle_track" layers="0" collapse-mode="2" max-obj-count="8" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment> <![CDATA[자전거 종주길 테이블]]> </comment>
@@ -500,6 +506,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id_users">
 		<type name="integer" length="0"/>
 	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+	</column>
 	<constraint name="bicycle_track_pk" type="pk-constr" table="public.bicycle_track">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -515,7 +524,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 </sequence>
 
-<table name="bicycle_waypoint" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+<table name="bicycle_waypoint" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment> <![CDATA[자전거길 웨이 포인트 ( 인증 센터 등 )]]> </comment>
@@ -531,6 +540,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="id_bicycle_track" not-null="true">
 		<type name="bigint" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
 	</column>
 	<constraint name="bicycle_certification_center_pk" type="pk-constr" table="public.bicycle_waypoint">
 		<columns names="id,id_bicycle_track" ref-type="src-columns"/>
@@ -550,7 +562,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id" not-null="true" sequence="public.friends_id_seq">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="created_at">
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 		<comment> <![CDATA[생성일]]> </comment>
 	</column>
@@ -611,10 +623,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="100"/>
 		<comment> <![CDATA[제목]]> </comment>
 	</column>
-	<column name="created_at" not-null="true">
-		<type name="timestamp" length="0"/>
-		<comment> <![CDATA[생성일]]> </comment>
-	</column>
 	<column name="start_dt" not-null="true">
 		<type name="date" length="0"/>
 		<comment> <![CDATA[시작일]]> </comment>
@@ -635,6 +643,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="smallint" length="0"/>
 		<comment> <![CDATA[게시물 공개 범위]]> </comment>
 	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
+		<comment> <![CDATA[생성일]]> </comment>
+	</column>
 	<constraint name="riding_pk" type="pk-constr" table="public.riding">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -645,7 +657,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 </sequence>
 
-<table name="riding_participants" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+<table name="riding_participants" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment> <![CDATA[라이딩 일정 참여자 테이블]]> </comment>
@@ -658,6 +670,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="id_riding">
 		<type name="integer" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
 	</column>
 	<constraint name="riding_participant_pk" type="pk-constr" table="public.riding_participants">
 		<columns names="id" ref-type="src-columns"/>
@@ -672,7 +687,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id_users" not-null="true">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="created_at">
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 		<comment> <![CDATA[생성일]]> </comment>
 	</column>
@@ -718,7 +733,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="text" length="0"/>
 		<comment> <![CDATA[내용]]> </comment>
 	</column>
-	<column name="created_at" not-null="true">
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 		<comment> <![CDATA[작성 날짜]]> </comment>
 	</column>
@@ -743,7 +758,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id" not-null="true" sequence="public.faq_id_seq">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="created_at">
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 		<comment> <![CDATA[작성 날짜]]> </comment>
 	</column>
@@ -784,7 +799,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="text" length="0"/>
 		<comment> <![CDATA[내용]]> </comment>
 	</column>
-	<column name="created_at" not-null="true">
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 		<comment> <![CDATA[작성일]]> </comment>
 	</column>
@@ -801,7 +816,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 </sequence>
 
-<table name="qna_answer" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+<table name="qna_answer" layers="0" collapse-mode="2" max-obj-count="7" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment> <![CDATA[qna 답변 테이블]]> </comment>
@@ -821,6 +836,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="id_users">
 		<type name="integer" length="0"/>
+	</column>
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
+		<type name="timestamp" length="0"/>
 	</column>
 	<constraint name="qna_answer_pk" type="pk-constr" table="public.qna_answer">
 		<columns names="id,id_qna" ref-type="src-columns"/>
@@ -892,7 +910,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id" not-null="true" sequence="public.riding_history_id_seq">
 		<type name="bigint" length="0"/>
 	</column>
-	<column name="created_at" not-null="true">
+	<column name="created_at" not-null="true" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 	</column>
 	<column name="id_users" not-null="true">
@@ -916,7 +934,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id" not-null="true" sequence="public.riding_points_history_id_seq">
 		<type name="bigint" length="0"/>
 	</column>
-	<column name="created_at" not-null="true">
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 	</column>
 	<column name="geom" not-null="true">
@@ -955,7 +973,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 - 2 :  User
 - 3 : Guest]]> </comment>
 	</column>
-	<column name="created_at" not-null="true">
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 		<comment> <![CDATA[생성일]]> </comment>
 	</column>
@@ -981,7 +999,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="text" length="0"/>
 		<comment> <![CDATA[페이지 경로]]> </comment>
 	</column>
-	<column name="created_at">
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 	</column>
 	<constraint name="access_page_pk" type="pk-constr" table="public.access_page">
@@ -1001,7 +1019,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id" not-null="true" sequence="public.user_type_access_page_id_seq">
 		<type name="integer" length="0"/>
 	</column>
-	<column name="created_at" not-null="true">
+	<column name="created_at" default-value="CURRENT_TIMESTAMP">
 		<type name="timestamp" length="0"/>
 		<comment> <![CDATA[생성일]]> </comment>
 	</column>
