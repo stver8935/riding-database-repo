@@ -3,70 +3,64 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="1.2.0-alpha" use-changelog="false" max-obj-count="14"
-	 last-position="1349,-544" last-zoom="0.85" scene-rect="0,-640,3735.18,1931.12"
+<dbmodel pgmodeler-ver="1.2.0-alpha" use-changelog="false" max-obj-count="37"
+	 last-position="-17,-21" last-zoom="0.6" scene-rect="-28,-41,7662.67,3033.12"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
 	 layer-name-colors="#000000"
 	 layer-rect-colors="#b4b4b4"
 	 show-layer-names="false" show-layer-rects="false">
-<database name="new_database" is-template="false" allow-conns="true">
-	<appended-sql> <![CDATA[CREATE TABLE public."MOCT_LINK" (
-	id serial4 NOT NULL,
-	geom public.geometry(multilinestring) NULL,
-	link_id varchar(10) NULL,
-	f_node varchar(10) NULL,
-	t_node varchar(10) NULL,
-	lanes int4 NULL,
-	road_rank varchar(3) NULL,
-	road_type varchar(3) NULL,
-	road_no varchar(5) NULL,
-	road_name varchar(30) NULL,
-	road_use varchar(1) NULL,
-	multi_link varchar(1) NULL,
-	"connect" varchar(3) NULL,
-	max_spd int4 NULL,
-	rest_veh varchar(3) NULL,
-	rest_w int4 NULL,
-	rest_h int4 NULL,
-	"c-its" varchar(1) NULL,
-	length float8 NULL,
-	updatedate varchar(8) NULL,
-	remark varchar(30) NULL,
-	hist_type varchar(8) NULL,
-	histremark varchar(30) NULL,
-	CONSTRAINT "MOCT_LINK_pkey" PRIMARY KEY (id)
-);
-CREATE INDEX "sidx_MOCT_LINK_geom" ON public."MOCT_LINK" USING gist (geom);]]> </appended-sql>
+<database name="riding" encoding="UTF8" lc-collate="en_US.utf8" lc-ctype="en_US.utf8" is-template="false" allow-conns="true">
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
 </database>
 
-<schema name="public" layers="0" fill-color="#e1e1e1" name-color="#000000" sql-disabled="true">
+<schema name="public" layers="0" rect-visible="true" fill-color="#e1e1e1" name-color="#000000" sql-disabled="true">
 </schema>
 
-<table name="users" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
+<extension name="postgis" cur-version="3.4.2">
+	<schema name="public"/>
+	<comment> <![CDATA[PostGIS geometry, geography, and raster spatial types and functions]]> </comment>
+	<type name="spheroid"/>
+	<type name="geometry"/>
+	<type name="box3d"/>
+	<type name="box2d"/>
+	<type name="box2df"/>
+	<type name="gidx"/>
+	<type name="geometry_dump"/>
+	<type name="valid_detail"/>
+	<type name="geography"/>
+</extension>
+
+<sequence name="users_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1060" y="720"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
+</sequence>
+
+<table name="users" layers="0" collapse-mode="2" max-obj-count="18" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1780" y="1180"/>
+	<column name="id" not-null="true" sequence="public.users_id_seq">
+		<type name="bigint" length="0"/>
 		<comment> <![CDATA[primary key]]> </comment>
 	</column>
 	<column name="password" not-null="true">
-		<type name="varchar" length="255"/>
+		<type name="character varying" length="255"/>
 		<comment> <![CDATA[user password]]> </comment>
 	</column>
 	<column name="email">
-		<type name="varchar" length="255"/>
+		<type name="character varying" length="255"/>
 	</column>
 	<column name="user_name" not-null="true">
-		<type name="varchar" length="100"/>
+		<type name="character varying" length="255"/>
 	</column>
-	<column name="created_at" not-null="true">
+	<column name="created_at">
 		<type name="timestamp" length="0"/>
 	</column>
 	<column name="login_fail_count" not-null="true" default-value="0">
-		<type name="smallint" length="0"/>
+		<type name="integer" length="0"/>
 		<comment> <![CDATA[user login fail count]]> </comment>
 	</column>
 	<column name="last_location">
@@ -74,29 +68,66 @@ CREATE INDEX "sidx_MOCT_LINK_geom" ON public."MOCT_LINK" USING gist (geom);]]> <
 		<comment> <![CDATA[user last location coordinates]]> </comment>
 	</column>
 	<column name="refresh_token">
-		<type name="varchar" length="255"/>
+		<type name="character varying" length="255"/>
 	</column>
-	<constraint name="constraint_primary_key" type="pk-constr" table="public.users">
+	<column name="role" not-null="true">
+		<type name="character varying" length="255"/>
+		<comment> <![CDATA[유저 권한]]> </comment>
+	</column>
+	<column name="fcm_token">
+		<type name="character varying" length="255"/>
+		<comment> <![CDATA[Firebase Cloud Messaging 토큰]]> </comment>
+	</column>
+	<column name="id_user_type">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="age" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="phone_num" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="user_role">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="user_status_code" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<constraint name="users_pk" type="pk-constr" table="public.users">
 		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="users_user_role_check" type="ck-constr" table="public.users">
+			<expression> <![CDATA[((user_role)::text = ANY ((ARRAY['USER'::character varying, 'ADMIN'::character varying, 'GUEST'::character varying])::text[]))]]> </expression>
+	</constraint>
+	<constraint name="users_user_status_code_check" type="ck-constr" table="public.users">
+			<expression> <![CDATA[((user_status_code)::text = ANY ((ARRAY['BLOCK'::character varying, 'LOCK'::character varying, 'ACTIVE'::character varying, 'SLEEP'::character varying])::text[]))]]> </expression>
+	</constraint>
+	<constraint name="uksarsqrk02bwqbsmhk0x9ci0j2" type="uq-constr" table="public.users">
+		<columns names="user_name,email,phone_num" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="bedge" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="3" z-value="0">
+<sequence name="bedge_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="40" y="60"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
+</sequence>
+
+<table name="bedge" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1780" y="120"/>
+	<column name="id" not-null="true" sequence="public.bedge_id_seq">
+		<type name="integer" length="0"/>
 		<comment> <![CDATA[user bedget list]]> </comment>
 	</column>
 	<column name="name" not-null="true">
-		<type name="varchar" length="100"/>
+		<type name="character varying" length="100"/>
 	</column>
 	<column name="decription">
 		<type name="text" length="0"/>
 		<comment> <![CDATA[user bedge description]]> </comment>
 	</column>
-	<constraint name="constraint_primary_key" type="pk-constr" table="public.bedge">
+	<constraint name="bedge_pk" type="pk-constr" table="public.bedge">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
@@ -104,101 +135,98 @@ CREATE INDEX "sidx_MOCT_LINK_geom" ON public."MOCT_LINK" USING gist (geom);]]> <
 <table name="user_bedge" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="440" y="280"/>
+	<position x="1820" y="480"/>
 	<column name="fk_user_id" not-null="true">
 		<type name="bigint" length="0"/>
 	</column>
 	<column name="fk_bedge_id" not-null="true">
 		<type name="bigint" length="0"/>
 	</column>
-	<constraint name="id" type="pk-constr" table="public.user_bedge">
-		<columns names="fk_user_id,fk_bedge_id" ref-type="src-columns"/>
+	<column name="id_users" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="id_bedge">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="user_bedge_pk" type="pk-constr" table="public.user_bedge">
+		<columns names="fk_user_id,fk_bedge_id,id_users" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<relationship name="users_has_many_user_bedge" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#1e2550"
-	 src-table="public.users"
-	 dst-table="public.user_bedge"
-	 src-required="false" dst-required="false"/>
-
-<relationship name="bedge_has_many_user_bedge" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#9aec0a"
-	 src-table="public.bedge"
-	 dst-table="public.user_bedge"
-	 src-required="false" dst-required="false"/>
+<sequence name="pharmacy_info_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
 
 <table name="pharmacy_info" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="360" y="-480"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
+	<position x="6380" y="1720"/>
+	<column name="id" not-null="true" sequence="public.pharmacy_info_id_seq">
+		<type name="integer" length="0"/>
 	</column>
-	<constraint name="constraint_primary_key" type="pk-constr" table="public.pharmacy_info">
+	<constraint name="pharmacy_info_pk" type="pk-constr" table="public.pharmacy_info">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
+
+<sequence name="restaurant_info_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
 
 <table name="restaurant_info" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="60" y="-480"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
+	<position x="5580" y="1220"/>
+	<column name="id" not-null="true" sequence="public.restaurant_info_id_seq">
+		<type name="integer" length="0"/>
 	</column>
-	<constraint name="constraint_primary_key" type="pk-constr" table="public.restaurant_info">
+	<constraint name="restaurant_info_pk" type="pk-constr" table="public.restaurant_info">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="bicycle_route" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+<sequence name="bicycle_route_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="860" y="-160"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
-	</column>
-	<constraint name="constraint_primary_key" type="pk-constr" table="public.bicycle_route">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
+</sequence>
 
-<table name="standard_link" layers="0" collapse-mode="2" max-obj-count="27" z-value="0">
+<sequence name="standard_veh_link_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="2060" y="-500"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
+</sequence>
+
+<table name="standard_veh_link" layers="0" collapse-mode="2" max-obj-count="27" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[국토부 표준 차도 링크 테이블]]> </comment>
+	<position x="6280" y="1880"/>
+	<column name="id" not-null="true" sequence="public.standard_veh_link_id_seq">
+		<type name="integer" length="0"/>
 	</column>
 	<column name="geom">
-		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="0" srid="0"/>
+		<type name="public.geometry" length="0"/>
 		<comment> <![CDATA[geometry 정보]]> </comment>
 	</column>
 	<column name="link_id">
-		<type name="varchar" length="10"/>
+		<type name="character varying" length="10"/>
 		<comment> <![CDATA[링크 아이디]]> </comment>
 	</column>
 	<column name="f_node">
-		<type name="varchar" length="10"/>
+		<type name="character varying" length="10"/>
 		<comment> <![CDATA[시작 노드]]> </comment>
 	</column>
 	<column name="t_node">
-		<type name="varchar" length="10"/>
+		<type name="character varying" length="10"/>
 		<comment> <![CDATA[종료 노드]]> </comment>
 	</column>
 	<column name="lanes">
-		<type name="int4" length="0"/>
+		<type name="integer" length="0"/>
 		<comment> <![CDATA[차로 수]]> </comment>
 	</column>
 	<column name="road_rank">
-		<type name="varchar" length="3"/>
+		<type name="character varying" length="3"/>
 		<comment> <![CDATA[*도로 등급 코드
 
 - 101 : 고속 국도
@@ -208,43 +236,40 @@ CREATE INDEX "sidx_MOCT_LINK_geom" ON public."MOCT_LINK" USING gist (geom);]]> <
 - 105 : 국가 지원 지방도
 - 106 : 지방도
 - 107 : 시.군도
-- 108 : 기타
-]]> </comment>
+- 108 : 기타]]> </comment>
 	</column>
 	<column name="route_type">
-		<type name="varchar" length="3"/>
+		<type name="character varying" length="3"/>
 		<comment> <![CDATA[*도로 유형 코드
 
 - 000 : 일반 국도
 - 001 : 고가 차도
 - 002 : 지하차도
 - 003 : 교량
-- 004 : 터널
-]]> </comment>
+- 004 : 터널]]> </comment>
 	</column>
 	<column name="road_no">
-		<type name="varchar" length="5"/>
+		<type name="character varying" length="5"/>
 	</column>
 	<column name="road_name">
-		<type name="varchar" length="30"/>
+		<type name="character varying" length="30"/>
 	</column>
 	<column name="road_use">
-		<type name="varchar" length="1"/>
+		<type name="character varying" length="1"/>
 		<comment> <![CDATA[*사용 여부
 
 - 0 : 사용
-- 1 : 미사용
-]]> </comment>
+- 1 : 미사용]]> </comment>
 	</column>
 	<column name="multi_link">
-		<type name="varchar" length="1"/>
+		<type name="character varying" length="1"/>
 		<comment> <![CDATA[*중용구간 여부
 
 - 0 : 독립구간
 - 1 : 중용구간]]> </comment>
 	</column>
 	<column name="connect">
-		<type name="varchar" length="3"/>
+		<type name="character varying" length="3"/>
 		<comment> <![CDATA[*연결로 코드
 
 - 000 : 연결로 아님
@@ -255,15 +280,14 @@ CREATE INDEX "sidx_MOCT_LINK_geom" ON public."MOCT_LINK" USING gist (geom);]]> <
 - 105 : 국가지원지방도 연결로
 - 106 : 지방도 연결로
 - 107 : 시.군도 연결로
-- 108 : 기타도로 연결로
-]]> </comment>
+- 108 : 기타도로 연결로]]> </comment>
 	</column>
 	<column name="max_spd">
-		<type name="int4" length="0"/>
+		<type name="integer" length="0"/>
 		<comment> <![CDATA[속도 제한]]> </comment>
 	</column>
 	<column name="rest_veh">
-		<type name="varchar" length="3"/>
+		<type name="character varying" length="3"/>
 		<comment> <![CDATA[*통과 제한 차량
 
 - 0 : 모든 차량 통행 가능
@@ -272,65 +296,69 @@ CREATE INDEX "sidx_MOCT_LINK_geom" ON public."MOCT_LINK" USING gist (geom);]]> <
 - 3 : 버스 
 - 4 : 트럭
 - 5 : 이륜차
-- 6 : 기타차량
-]]> </comment>
+- 6 : 기타차량]]> </comment>
 	</column>
 	<column name="rest_w">
-		<type name="int4" length="0"/>
+		<type name="integer" length="0"/>
 		<comment> <![CDATA[통과 제한 하중]]> </comment>
 	</column>
 	<column name="rest_h">
-		<type name="int4" length="0"/>
+		<type name="integer" length="0"/>
 		<comment> <![CDATA[통과 제한 높이]]> </comment>
 	</column>
 	<column name="c-its">
-		<type name="varchar" length="1"/>
+		<type name="character varying" length="1"/>
 		<comment> <![CDATA[*c-its 적용 여부
 
 - 0 : 미적용
-- 1 : 적용
-]]> </comment>
+- 1 : 적용]]> </comment>
 	</column>
 	<column name="length">
-		<type name="float8" length="0"/>
+		<type name="double precision" length="0"/>
 		<comment> <![CDATA[링크 길이 (m)]]> </comment>
 	</column>
 	<column name="updatedate">
-		<type name="varchar" length="8"/>
+		<type name="character varying" length="8"/>
 		<comment> <![CDATA[업데이트 날짜 yyyyMMdd]]> </comment>
 	</column>
 	<column name="remark">
-		<type name="varchar" length="30"/>
+		<type name="character varying" length="30"/>
 		<comment> <![CDATA[비고]]> </comment>
 	</column>
 	<column name="hist_type">
-		<type name="varchar" length="8"/>
+		<type name="character varying" length="8"/>
 	</column>
 	<column name="histremark">
-		<type name="varchar" length="30"/>
+		<type name="character varying" length="30"/>
 	</column>
-	<constraint name="constraint_primary_key" type="pk-constr" table="public.standard_link">
+	<constraint name="constraint_primary_key" type="pk-constr" table="public.standard_veh_link">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="standard_node" layers="0" collapse-mode="2" max-obj-count="12" z-value="0">
+<sequence name="standard_veh_node_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1600" y="-480"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
+</sequence>
+
+<table name="standard_veh_node" layers="0" collapse-mode="2" max-obj-count="12" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[국토부 표준 차량 노드 테이블]]> </comment>
+	<position x="6660" y="1900"/>
+	<column name="id" not-null="true" sequence="public.standard_veh_node_id_seq">
+		<type name="integer" length="0"/>
 	</column>
 	<column name="geom">
 		<type name="geometry" length="0" spatial-type="POINT" variation="0" srid="0"/>
 		<comment> <![CDATA[geometry 정보]]> </comment>
 	</column>
 	<column name="node_id">
-		<type name="varchar" length="10"/>
+		<type name="character varying" length="10"/>
 		<comment> <![CDATA[노드 아이디]]> </comment>
 	</column>
 	<column name="node_type">
-		<type name="varchar" length="3"/>
+		<type name="character varying" length="3"/>
 		<comment> <![CDATA[* 노드 종류
 
 - 101 : 교차로
@@ -339,176 +367,910 @@ CREATE INDEX "sidx_MOCT_LINK_geom" ON public."MOCT_LINK" USING gist (geom);]]> <
 - 104 : 도로시설물
 - 105 : 행정 경계 
 - 106 : 연결로 접속부
-- 107 : IC 및 JC
-]]> </comment>
+- 107 : IC 및 JC]]> </comment>
 	</column>
 	<column name="node_name">
-		<type name="varchar" length="30"/>
+		<type name="character varying" length="30"/>
 		<comment> <![CDATA[노드 명칭]]> </comment>
 	</column>
 	<column name="turn_p">
-		<type name="varchar" length="1"/>
+		<type name="character varying" length="1"/>
 		<comment> <![CDATA[* 회전 제한 유무
 
 - 0 : 무
-- 1 : 유
-]]> </comment>
+- 1 : 유]]> </comment>
 	</column>
 	<column name="updatedate">
-		<type name="varchar" length="8"/>
+		<type name="character varying" length="8"/>
 		<comment> <![CDATA[업데이트 날짜 (yyyyMMdd)]]> </comment>
 	</column>
 	<column name="remark">
-		<type name="varchar" length="30"/>
+		<type name="character varying" length="30"/>
 		<comment> <![CDATA[비고]]> </comment>
 	</column>
 	<column name="hist_type">
-		<type name="varchar" length="8"/>
+		<type name="character varying" length="8"/>
 	</column>
 	<column name="histremark">
-		<type name="varchar" length="30"/>
+		<type name="character varying" length="30"/>
 	</column>
-	<constraint name="constraint_primary_key" type="pk-constr" table="public.standard_node">
+	<constraint name="standard_veh_node_pk" type="pk-constr" table="public.standard_veh_node">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="bicycle_route_link" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+<sequence name="bicycle_route_link_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1240" y="-480"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
-	</column>
-	<constraint name="constraint_primary_key" type="pk-constr" table="public.bicycle_route_link">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
+</sequence>
 
-<table name="bicycle_route_node" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+<sequence name="bicycle_route_node_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="860" y="-480"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
-	</column>
-	<constraint name="constraint_primary_key" type="pk-constr" table="public.bicycle_route_node">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
+</sequence>
 
-<table name="bookmark_route" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+<sequence name="bookmark_track_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="860" y="280"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
-	</column>
-	<constraint name="constraint_primary_key" type="pk-constr" table="public.bookmark_route">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
+</sequence>
 
-<table name="bicycle_node" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+<table name="bookmark_track" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1600" y="-180"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
+	<comment> <![CDATA[자전거 길 북마크 테이블]]> </comment>
+	<position x="1160" y="700"/>
+	<column name="id" not-null="true" sequence="public.bookmark_track_id_seq">
+		<type name="integer" length="0"/>
 	</column>
-	<constraint name="constraint_primary_key" type="pk-constr" table="public.bicycle_node">
+	<column name="id_bicycle_track">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="id_users">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="created_at" not-null="true">
+		<type name="timestamp" length="0"/>
+		<comment> <![CDATA[생성 날짜]]> </comment>
+	</column>
+	<constraint name="route_bookmark_pk" type="pk-constr" table="public.bookmark_track">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<genericsql name="MOCT_LINK">
-	<definition> <![CDATA[CREATE TABLE public."MOCT_LINK" (
-	id serial4 NOT NULL,
-	geom public.geometry(multilinestring) NULL,
-	link_id varchar(10) NULL,
-	f_node varchar(10) NULL,
-	t_node varchar(10) NULL,
-	lanes int4 NULL,
-	road_rank varchar(3) NULL,
-	road_type varchar(3) NULL,
-	road_no varchar(5) NULL,
-	road_name varchar(30) NULL,
-	road_use varchar(1) NULL,
-	multi_link varchar(1) NULL,
-	"connect" varchar(3) NULL,
-	max_spd int4 NULL,
-	rest_veh varchar(3) NULL,
-	rest_w int4 NULL,
-	rest_h int4 NULL,
-	"c-its" varchar(1) NULL,
-	length float8 NULL,
-	updatedate varchar(8) NULL,
-	remark varchar(30) NULL,
-	hist_type varchar(8) NULL,
-	histremark varchar(30) NULL,
-	CONSTRAINT "MOCT_LINK_pkey" PRIMARY KEY (id)
-);
-CREATE INDEX "sidx_MOCT_LINK_geom" ON public."MOCT_LINK" USING gist (geom);]]> </definition>
-</genericsql>
+<sequence name="bicycle_track_points_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
 
-<genericsql name="mock_link">
-	<definition> <![CDATA[CREATE TABLE "MOCT_LINK" (
-	id serial4 NOT NULL,
-	geom public.geometry(multilinestring) NULL,
-	link_id varchar(10) NULL,
-	f_node varchar(10) NULL,
-	t_node varchar(10) NULL,
-	lanes int4 NULL,
-	road_rank varchar(3) NULL,
-	road_type varchar(3) NULL,
-	road_no varchar(5) NULL,
-	road_name varchar(30) NULL,
-	road_use varchar(1) NULL,
-	multi_link varchar(1) NULL,
-	"connect" varchar(3) NULL,
-	max_spd int4 NULL,
-	rest_veh varchar(3) NULL,
-	rest_w int4 NULL,
-	rest_h int4 NULL,
-	"c-its" varchar(1) NULL,
-	length float8 NULL,
-	updatedate varchar(8) NULL,
-	remark varchar(30) NULL,
-	hist_type varchar(8) NULL,
-	histremark varchar(30) NULL,
-	CONSTRAINT "MOCT_LINK_pkey" PRIMARY KEY (id)
-);
-CREATE INDEX "sidx_MOCT_LINK_geom" ON public."MOCT_LINK" USING gist (geom);]]> </definition>
-</genericsql>
+<table name="bicycle_track_points" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[자전거 종주길 경로를 생성하기 위한 좌표 테이블]]> </comment>
+	<position x="420" y="1000"/>
+	<column name="id" not-null="true" sequence="public.bicycle_track_points_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="geometry" not-null="true">
+		<type name="geometry" length="0" spatial-type="POINT" variation="0" srid="0"/>
+		<comment> <![CDATA[종주길 경로 좌표]]> </comment>
+	</column>
+	<column name="ele">
+		<type name="real" length="0"/>
+		<comment> <![CDATA[해당 좌표점 고도]]> </comment>
+	</column>
+	<column name="created_at" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="id_bicycle_track" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<constraint name="bicycle_track_points_pk" type="pk-constr" table="public.bicycle_track_points">
+		<columns names="id,id_bicycle_track" ref-type="src-columns"/>
+	</constraint>
+</table>
 
-<genericsql name="new_database">
-	<definition> <![CDATA[CREATE TABLE new_database."MOCT_LINK" (
-	id serial4 NOT NULL,
-	geom public.geometry(multilinestring) NULL,
-	link_id varchar(10) NULL,
-	f_node varchar(10) NULL,
-	t_node varchar(10) NULL,
-	lanes int4 NULL,
-	road_rank varchar(3) NULL,
-	road_type varchar(3) NULL,
-	road_no varchar(5) NULL,
-	road_name varchar(30) NULL,
-	road_use varchar(1) NULL,
-	multi_link varchar(1) NULL,
-	"connect" varchar(3) NULL,
-	max_spd int4 NULL,
-	rest_veh varchar(3) NULL,
-	rest_w int4 NULL,
-	rest_h int4 NULL,
-	"c-its" varchar(1) NULL,
-	length float8 NULL,
-	updatedate varchar(8) NULL,
-	remark varchar(30) NULL,
-	hist_type varchar(8) NULL,
-	histremark varchar(30) NULL,
-	CONSTRAINT "MOCT_LINK_pkey" PRIMARY KEY (id)
-);
-CREATE INDEX "sidx_MOCT_LINK_geom" ON new_database."MOCT_LINK" USING gist (geom);]]> </definition>
-</genericsql>
+<sequence name="bicycle_track_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="bicycle_track" layers="0" collapse-mode="2" max-obj-count="7" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[자전거 종주길 테이블]]> </comment>
+	<position x="420" y="700"/>
+	<column name="id" not-null="true" sequence="public.bicycle_track_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="100"/>
+		<comment> <![CDATA[종주길 명칭]]> </comment>
+	</column>
+	<column name="length">
+		<type name="real" length="0"/>
+		<comment> <![CDATA[자전거 종주길 거리 (m)]]> </comment>
+	</column>
+	<column name="riding_time">
+		<type name="interval" length="0"/>
+		<comment> <![CDATA[예상 이동 시간]]> </comment>
+	</column>
+	<column name="geom" not-null="true">
+		<type name="geometry" length="0" spatial-type="LINESTRING" variation="0" srid="0"/>
+	</column>
+	<column name="id_users">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="bicycle_track_pk" type="pk-constr" table="public.bicycle_track">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="bicycle_track_waypoint_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<sequence name="bicycle_waypoint_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="bicycle_waypoint" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[자전거길 웨이 포인트 ( 인증 센터 등 )]]> </comment>
+	<position x="0" y="700"/>
+	<column name="id" not-null="true" sequence="public.bicycle_waypoint_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="geometry">
+		<type name="geometry" length="0" spatial-type="POINT" variation="0" srid="0"/>
+	</column>
+	<column name="id_bicycle_track" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<constraint name="bicycle_certification_center_pk" type="pk-constr" table="public.bicycle_waypoint">
+		<columns names="id,id_bicycle_track" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="friends_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="friends" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[친구 테이블]]> </comment>
+	<position x="3200" y="2240"/>
+	<column name="id" not-null="true" sequence="public.friends_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="created_at">
+		<type name="timestamp" length="0"/>
+		<comment> <![CDATA[생성일]]> </comment>
+	</column>
+	<column name="from_user_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="to_user_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="id_users" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="friends_pk" type="pk-constr" table="public.friends">
+		<columns names="id,id_users" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="riding_group_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="riding_group" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[라이딩 그룹 ( 동호회 등 ) 테이블]]> </comment>
+	<position x="6380" y="1580"/>
+	<column name="id" not-null="true" sequence="public.riding_group_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="description">
+		<type name="text" length="0"/>
+		<comment> <![CDATA[라이딩 그룹 소개글]]> </comment>
+	</column>
+	<column name="created_at">
+		<type name="timestamp" length="0"/>
+		<comment> <![CDATA[생성일]]> </comment>
+	</column>
+	<constraint name="riding_group_pk" type="pk-constr" table="public.riding_group">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="riding_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="riding" layers="0" collapse-mode="2" max-obj-count="9" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[라이딩 일정 테이블 -- track 테이블을 참조 해야 한다.]]> </comment>
+	<position x="40" y="1260"/>
+	<column name="id" not-null="true" sequence="public.riding_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="title">
+		<type name="character varying" length="100"/>
+		<comment> <![CDATA[제목]]> </comment>
+	</column>
+	<column name="created_at" not-null="true">
+		<type name="timestamp" length="0"/>
+		<comment> <![CDATA[생성일]]> </comment>
+	</column>
+	<column name="start_dt" not-null="true">
+		<type name="date" length="0"/>
+		<comment> <![CDATA[시작일]]> </comment>
+	</column>
+	<column name="end_dt" not-null="true">
+		<type name="date" length="0"/>
+		<comment> <![CDATA[종료일]]> </comment>
+	</column>
+	<column name="max_people_num">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[최대 참여 인원]]> </comment>
+	</column>
+	<column name="description">
+		<type name="text" length="0"/>
+		<comment> <![CDATA[해당 라이딩 일정 설명]]> </comment>
+	</column>
+	<column name="visibility" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[게시물 공개 범위]]> </comment>
+	</column>
+	<constraint name="riding_pk" type="pk-constr" table="public.riding">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="riding_participants_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="riding_participants" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[라이딩 일정 참여자 테이블]]> </comment>
+	<position x="800" y="1260"/>
+	<column name="id" not-null="true" sequence="public.riding_participants_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="id_users">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="id_riding">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="riding_participant_pk" type="pk-constr" table="public.riding_participants">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="notification" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[알람테이블]]> </comment>
+	<position x="3180" y="580"/>
+	<column name="id_users" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="created_at">
+		<type name="timestamp" length="0"/>
+		<comment> <![CDATA[생성일]]> </comment>
+	</column>
+	<column name="from_user_id">
+		<type name="integer" length="0"/>
+		<comment> <![CDATA[친구 요청 유저 아이디]]> </comment>
+	</column>
+	<column name="to_user_id">
+		<type name="integer" length="0"/>
+		<comment> <![CDATA[친구 요청 대상 아이디]]> </comment>
+	</column>
+	<column name="type" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[알람 타입
+- 0 : 공지
+- 1 : 프로모션 ( 광고 )
+- 2 : 라이딩 알람
+- 3 : 친구 신청]]> </comment>
+	</column>
+	<constraint name="notification_pk" type="pk-constr" table="public.notification">
+		<columns names="id_users" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="notice_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="notice" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[공지사항 테이블]]> </comment>
+	<position x="3180" y="880"/>
+	<column name="id" not-null="true" sequence="public.notice_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="title">
+		<type name="character varying" length="100"/>
+		<comment> <![CDATA[공지 제목]]> </comment>
+	</column>
+	<column name="contents">
+		<type name="text" length="0"/>
+		<comment> <![CDATA[내용]]> </comment>
+	</column>
+	<column name="created_at" not-null="true">
+		<type name="timestamp" length="0"/>
+		<comment> <![CDATA[작성 날짜]]> </comment>
+	</column>
+	<column name="id_users">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="notice_pk" type="pk-constr" table="public.notice">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="faq_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="faq" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[faq 테이블]]> </comment>
+	<position x="3220" y="1680"/>
+	<column name="id" not-null="true" sequence="public.faq_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="created_at">
+		<type name="timestamp" length="0"/>
+		<comment> <![CDATA[작성 날짜]]> </comment>
+	</column>
+	<column name="question">
+		<type name="text" length="0"/>
+		<comment> <![CDATA[질문]]> </comment>
+	</column>
+	<column name="answer">
+		<type name="text" length="0"/>
+		<comment> <![CDATA[답변]]> </comment>
+	</column>
+	<column name="id_users">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="faq_pk" type="pk-constr" table="public.faq">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="qna_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="qna" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[qna]]> </comment>
+	<position x="3200" y="1140"/>
+	<column name="id" not-null="true" sequence="public.qna_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="title">
+		<type name="character varying" length="100"/>
+		<comment> <![CDATA[제목]]> </comment>
+	</column>
+	<column name="contents">
+		<type name="text" length="0"/>
+		<comment> <![CDATA[내용]]> </comment>
+	</column>
+	<column name="created_at" not-null="true">
+		<type name="timestamp" length="0"/>
+		<comment> <![CDATA[작성일]]> </comment>
+	</column>
+	<column name="id_users">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="qna_pk" type="pk-constr" table="public.qna">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="qna_answer_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="qna_answer" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[qna 답변 테이블]]> </comment>
+	<position x="3200" y="1400"/>
+	<column name="id" not-null="true" sequence="public.qna_answer_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="title">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="contents">
+		<type name="text" length="0"/>
+		<comment> <![CDATA[내용]]> </comment>
+	</column>
+	<column name="id_qna" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="id_users">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="qna_answer_pk" type="pk-constr" table="public.qna_answer">
+		<columns names="id,id_qna" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="purchase_info_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="purchase_info" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[상품 구매 정보]]> </comment>
+	<position x="6700" y="1300"/>
+	<column name="id" not-null="true" sequence="public.purchase_info_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<constraint name="purchase_info_pk" type="pk-constr" table="public.purchase_info">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="payment_history_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="payment_history" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="5940" y="1220"/>
+	<column name="id" not-null="true" sequence="public.payment_history_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<constraint name="payment_history_pk" type="pk-constr" table="public.payment_history">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="promotion_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="promotion" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="6940" y="1440"/>
+	<column name="id" not-null="true" sequence="public.promotion_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<constraint name="promotion_pk" type="pk-constr" table="public.promotion">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="riding_history_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="riding_history" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[자전거 라이딩 기록]]> </comment>
+	<position x="1240" y="1800"/>
+	<column name="id" not-null="true" sequence="public.riding_history_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="created_at" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="id_users" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="riding_history_pk" type="pk-constr" table="public.riding_history">
+		<columns names="id,id_users" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="riding_points_history_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="riding_points_history" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[자전거 라이딩 기록]]> </comment>
+	<position x="800" y="1780"/>
+	<column name="id" not-null="true" sequence="public.riding_points_history_id_seq">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="created_at" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="geom" not-null="true">
+		<type name="geometry" length="0" spatial-type="POINT" variation="0" srid="0"/>
+	</column>
+	<column name="id_riding_history" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="id_users_riding_history" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="riding_points_history_pk" type="pk-constr" table="public.riding_points_history">
+		<columns names="id,id_riding_history,id_users_riding_history" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="user_type_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="user_type" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[유저 종류 테이블]]> </comment>
+	<position x="2380" y="380"/>
+	<column name="id" not-null="true" sequence="public.user_type_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="type" not-null="true">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[유저 타입
+
+- 0 : Admin
+- 1  : Manager
+- 2 :  User
+- 3 : Guest]]> </comment>
+	</column>
+	<column name="created_at" not-null="true">
+		<type name="timestamp" length="0"/>
+		<comment> <![CDATA[생성일]]> </comment>
+	</column>
+	<constraint name="user_type_pk" type="pk-constr" table="public.user_type">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="access_page_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="access_page" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment> <![CDATA[접근 가능 프론트엔드 페이지 테이블]]> </comment>
+	<position x="2840" y="60"/>
+	<column name="id" not-null="true" sequence="public.access_page_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="path">
+		<type name="text" length="0"/>
+		<comment> <![CDATA[페이지 경로]]> </comment>
+	</column>
+	<column name="created_at">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="access_page_pk" type="pk-constr" table="public.access_page">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="user_type_access_page_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="user_type_access_page" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="2380" y="40"/>
+	<column name="id" not-null="true" sequence="public.user_type_access_page_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="created_at" not-null="true">
+		<type name="timestamp" length="0"/>
+		<comment> <![CDATA[생성일]]> </comment>
+	</column>
+	<column name="id_access_page">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="id_user_type" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="user_type_access_page_pk" type="pk-constr" table="public.user_type_access_page">
+		<columns names="id,id_user_type" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="example_data_model_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<constraint name="user_type_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.user_type" table="public.users">
+	<columns names="id_user_type" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="bedge_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.bedge" table="public.user_bedge">
+	<columns names="id_bedge" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="public.users" table="public.user_bedge">
+	<columns names="id_users" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="bicycle_track_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.bicycle_track" table="public.bookmark_track">
+	<columns names="id_bicycle_track" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.users" table="public.bookmark_track">
+	<columns names="id_users" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="bicycle_track_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="public.bicycle_track" table="public.bicycle_track_points">
+	<columns names="id_bicycle_track" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="NO ACTION" ref-table="public.users" table="public.bicycle_track">
+	<columns names="id_users" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="bicycle_track_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="public.bicycle_track" table="public.bicycle_waypoint">
+	<columns names="id_bicycle_track" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="public.users" table="public.friends">
+	<columns names="id_users" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="riding_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.riding" table="public.riding_participants">
+	<columns names="id_riding" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.users" table="public.riding_participants">
+	<columns names="id_users" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="public.users" table="public.notification">
+	<columns names="id_users" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.users" table="public.notice">
+	<columns names="id_users" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.users" table="public.faq">
+	<columns names="id_users" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.users" table="public.qna">
+	<columns names="id_users" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="qna_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="public.qna" table="public.qna_answer">
+	<columns names="id_qna" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.users" table="public.qna_answer">
+	<columns names="id_users" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="public.users" table="public.riding_history">
+	<columns names="id_users" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="riding_history_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="public.riding_history" table="public.riding_points_history">
+	<columns names="id_riding_history,id_users_riding_history" ref-type="src-columns"/>
+	<columns names="id,id_users" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="access_page_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="SET NULL" ref-table="public.access_page" table="public.user_type_access_page">
+	<columns names="id_access_page" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="user_type_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="CASCADE" ref-table="public.user_type" table="public.user_type_access_page">
+	<columns names="id_user_type" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_users_user_type" type="relfk" layers="0"
+	 custom-color="#5960bf"
+	 src-table="public.users"
+	 dst-table="public.user_type" reference-fk="user_type_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_user_bedge_bedge" type="relfk" layers="0"
+	 custom-color="#62b08d"
+	 src-table="public.user_bedge"
+	 dst-table="public.bedge" reference-fk="bedge_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_user_bedge_users" type="relfk" layers="0"
+	 custom-color="#316972"
+	 src-table="public.user_bedge"
+	 dst-table="public.users" reference-fk="users_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_bookmark_track_bicycle_track" type="relfk" layers="0"
+	 custom-color="#99bf37"
+	 src-table="public.bookmark_track"
+	 dst-table="public.bicycle_track" reference-fk="bicycle_track_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_bookmark_track_users" type="relfk" layers="0"
+	 custom-color="#ef6cef"
+	 src-table="public.bookmark_track"
+	 dst-table="public.users" reference-fk="users_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_bicycle_track_points_bicycle_track" type="relfk" layers="0"
+	 custom-color="#348d97"
+	 src-table="public.bicycle_track_points"
+	 dst-table="public.bicycle_track" reference-fk="bicycle_track_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_bicycle_track_users" type="relfk" layers="0"
+	 custom-color="#e3fd06"
+	 src-table="public.bicycle_track"
+	 dst-table="public.users" reference-fk="users_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_bicycle_waypoint_bicycle_track" type="relfk" layers="0"
+	 custom-color="#a2d9bf"
+	 src-table="public.bicycle_waypoint"
+	 dst-table="public.bicycle_track" reference-fk="bicycle_track_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_friends_users" type="relfk" layers="0"
+	 custom-color="#2f518c"
+	 src-table="public.friends"
+	 dst-table="public.users" reference-fk="users_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_riding_participants_riding" type="relfk" layers="0"
+	 custom-color="#766cb9"
+	 src-table="public.riding_participants"
+	 dst-table="public.riding" reference-fk="riding_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_riding_participants_users" type="relfk" layers="0"
+	 custom-color="#019e3d"
+	 src-table="public.riding_participants"
+	 dst-table="public.users" reference-fk="users_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_notification_users" type="relfk" layers="0"
+	 custom-color="#2c7e71"
+	 src-table="public.notification"
+	 dst-table="public.users" reference-fk="users_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_notice_users" type="relfk" layers="0"
+	 custom-color="#e8180d"
+	 src-table="public.notice"
+	 dst-table="public.users" reference-fk="users_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_faq_users" type="relfk" layers="0"
+	 custom-color="#966cf6"
+	 src-table="public.faq"
+	 dst-table="public.users" reference-fk="users_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_qna_users" type="relfk" layers="0"
+	 custom-color="#3eeb93"
+	 src-table="public.qna"
+	 dst-table="public.users" reference-fk="users_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_qna_answer_qna" type="relfk" layers="0"
+	 custom-color="#763670"
+	 src-table="public.qna_answer"
+	 dst-table="public.qna" reference-fk="qna_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_qna_answer_users" type="relfk" layers="0"
+	 custom-color="#9ce071"
+	 src-table="public.qna_answer"
+	 dst-table="public.users" reference-fk="users_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_riding_history_users" type="relfk" layers="0"
+	 custom-color="#4e1159"
+	 src-table="public.riding_history"
+	 dst-table="public.users" reference-fk="users_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_riding_points_history_riding_history" type="relfk" layers="0"
+	 custom-color="#e303af"
+	 src-table="public.riding_points_history"
+	 dst-table="public.riding_history" reference-fk="riding_history_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_user_type_access_page_access_page" type="relfk" layers="0"
+	 custom-color="#82ffa9"
+	 src-table="public.user_type_access_page"
+	 dst-table="public.access_page" reference-fk="access_page_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_user_type_access_page_user_type" type="relfk" layers="0"
+	 custom-color="#d3a4b5"
+	 src-table="public.user_type_access_page"
+	 dst-table="public.user_type" reference-fk="user_type_fk"
+	 src-required="false" dst-required="true"/>
 
 </dbmodel>
