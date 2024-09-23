@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+ Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="1.2.0-alpha" use-changelog="false" max-obj-count="14"
+	 last-position="1349,-544" last-zoom="0.85" scene-rect="0,-640,3735.18,1931.12"
+	 default-schema="public" default-owner="postgres"
+	 layers="Default layer"
+	 active-layers="0"
+	 layer-name-colors="#000000"
+	 layer-rect-colors="#b4b4b4"
+	 show-layer-names="false" show-layer-rects="false">
+<database name="new_database" is-template="false" allow-conns="true">
+	<appended-sql> <![CDATA[CREATE TABLE public."MOCT_LINK" (
+	id serial4 NOT NULL,
+	geom public.geometry(multilinestring) NULL,
+	link_id varchar(10) NULL,
+	f_node varchar(10) NULL,
+	t_node varchar(10) NULL,
+	lanes int4 NULL,
+	road_rank varchar(3) NULL,
+	road_type varchar(3) NULL,
+	road_no varchar(5) NULL,
+	road_name varchar(30) NULL,
+	road_use varchar(1) NULL,
+	multi_link varchar(1) NULL,
+	"connect" varchar(3) NULL,
+	max_spd int4 NULL,
+	rest_veh varchar(3) NULL,
+	rest_w int4 NULL,
+	rest_h int4 NULL,
+	"c-its" varchar(1) NULL,
+	length float8 NULL,
+	updatedate varchar(8) NULL,
+	remark varchar(30) NULL,
+	hist_type varchar(8) NULL,
+	histremark varchar(30) NULL,
+	CONSTRAINT "MOCT_LINK_pkey" PRIMARY KEY (id)
+);
+CREATE INDEX "sidx_MOCT_LINK_geom" ON public."MOCT_LINK" USING gist (geom);]]> </appended-sql>
+</database>
+
+<schema name="public" layers="0" fill-color="#e1e1e1" name-color="#000000" sql-disabled="true">
+</schema>
+
+<table name="users" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1060" y="720"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+		<comment> <![CDATA[primary key]]> </comment>
+	</column>
+	<column name="password" not-null="true">
+		<type name="varchar" length="255"/>
+		<comment> <![CDATA[user password]]> </comment>
+	</column>
+	<column name="email">
+		<type name="varchar" length="255"/>
+	</column>
+	<column name="user_name" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="created_at" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="login_fail_count" not-null="true" default-value="0">
+		<type name="smallint" length="0"/>
+		<comment> <![CDATA[user login fail count]]> </comment>
+	</column>
+	<column name="last_location">
+		<type name="point" length="0"/>
+		<comment> <![CDATA[user last location coordinates]]> </comment>
+	</column>
+	<column name="refresh_token">
+		<type name="varchar" length="255"/>
+	</column>
+	<constraint name="constraint_primary_key" type="pk-constr" table="public.users">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="bedge" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="3" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="40" y="60"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+		<comment> <![CDATA[user bedget list]]> </comment>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="100"/>
+	</column>
+	<column name="decription">
+		<type name="text" length="0"/>
+		<comment> <![CDATA[user bedge description]]> </comment>
+	</column>
+	<constraint name="constraint_primary_key" type="pk-constr" table="public.bedge">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="user_bedge" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="440" y="280"/>
+	<column name="fk_user_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="fk_bedge_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
+	<constraint name="id" type="pk-constr" table="public.user_bedge">
+		<columns names="fk_user_id,fk_bedge_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="users_has_many_user_bedge" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#1e2550"
+	 src-table="public.users"
+	 dst-table="public.user_bedge"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="bedge_has_many_user_bedge" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#9aec0a"
+	 src-table="public.bedge"
+	 dst-table="public.user_bedge"
+	 src-required="false" dst-required="false"/>
+
+<table name="pharmacy_info" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="360" y="-480"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<constraint name="constraint_primary_key" type="pk-constr" table="public.pharmacy_info">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="restaurant_info" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="60" y="-480"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<constraint name="constraint_primary_key" type="pk-constr" table="public.restaurant_info">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="bicycle_route" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="860" y="-160"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<constraint name="constraint_primary_key" type="pk-constr" table="public.bicycle_route">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="standard_link" layers="0" collapse-mode="2" max-obj-count="27" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="2060" y="-500"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0" spatial-type="MULTILINESTRING" variation="0" srid="0"/>
+		<comment> <![CDATA[geometry 정보]]> </comment>
+	</column>
+	<column name="link_id">
+		<type name="varchar" length="10"/>
+		<comment> <![CDATA[링크 아이디]]> </comment>
+	</column>
+	<column name="f_node">
+		<type name="varchar" length="10"/>
+		<comment> <![CDATA[시작 노드]]> </comment>
+	</column>
+	<column name="t_node">
+		<type name="varchar" length="10"/>
+		<comment> <![CDATA[종료 노드]]> </comment>
+	</column>
+	<column name="lanes">
+		<type name="int4" length="0"/>
+		<comment> <![CDATA[차로 수]]> </comment>
+	</column>
+	<column name="road_rank">
+		<type name="varchar" length="3"/>
+		<comment> <![CDATA[*도로 등급 코드
+
+- 101 : 고속 국도
+- 102 : 도시 고속 국도
+- 103 : 일반 국도
+- 104 : 특별.광역시도
+- 105 : 국가 지원 지방도
+- 106 : 지방도
+- 107 : 시.군도
+- 108 : 기타
+]]> </comment>
+	</column>
+	<column name="route_type">
+		<type name="varchar" length="3"/>
+		<comment> <![CDATA[*도로 유형 코드
+
+- 000 : 일반 국도
+- 001 : 고가 차도
+- 002 : 지하차도
+- 003 : 교량
+- 004 : 터널
+]]> </comment>
+	</column>
+	<column name="road_no">
+		<type name="varchar" length="5"/>
+	</column>
+	<column name="road_name">
+		<type name="varchar" length="30"/>
+	</column>
+	<column name="road_use">
+		<type name="varchar" length="1"/>
+		<comment> <![CDATA[*사용 여부
+
+- 0 : 사용
+- 1 : 미사용
+]]> </comment>
+	</column>
+	<column name="multi_link">
+		<type name="varchar" length="1"/>
+		<comment> <![CDATA[*중용구간 여부
+
+- 0 : 독립구간
+- 1 : 중용구간]]> </comment>
+	</column>
+	<column name="connect">
+		<type name="varchar" length="3"/>
+		<comment> <![CDATA[*연결로 코드
+
+- 000 : 연결로 아님
+- 101 : 고속국도 연결로
+- 102 : 도시고속국도 연결로
+- 103 : 일반국도 연결로
+- 104 : 특별.광역시도 연결로
+- 105 : 국가지원지방도 연결로
+- 106 : 지방도 연결로
+- 107 : 시.군도 연결로
+- 108 : 기타도로 연결로
+]]> </comment>
+	</column>
+	<column name="max_spd">
+		<type name="int4" length="0"/>
+		<comment> <![CDATA[속도 제한]]> </comment>
+	</column>
+	<column name="rest_veh">
+		<type name="varchar" length="3"/>
+		<comment> <![CDATA[*통과 제한 차량
+
+- 0 : 모든 차량 통행 가능
+- 1 : 승용차
+- 2 : 승합차
+- 3 : 버스 
+- 4 : 트럭
+- 5 : 이륜차
+- 6 : 기타차량
+]]> </comment>
+	</column>
+	<column name="rest_w">
+		<type name="int4" length="0"/>
+		<comment> <![CDATA[통과 제한 하중]]> </comment>
+	</column>
+	<column name="rest_h">
+		<type name="int4" length="0"/>
+		<comment> <![CDATA[통과 제한 높이]]> </comment>
+	</column>
+	<column name="c-its">
+		<type name="varchar" length="1"/>
+		<comment> <![CDATA[*c-its 적용 여부
+
+- 0 : 미적용
+- 1 : 적용
+]]> </comment>
+	</column>
+	<column name="length">
+		<type name="float8" length="0"/>
+		<comment> <![CDATA[링크 길이 (m)]]> </comment>
+	</column>
+	<column name="updatedate">
+		<type name="varchar" length="8"/>
+		<comment> <![CDATA[업데이트 날짜 yyyyMMdd]]> </comment>
+	</column>
+	<column name="remark">
+		<type name="varchar" length="30"/>
+		<comment> <![CDATA[비고]]> </comment>
+	</column>
+	<column name="hist_type">
+		<type name="varchar" length="8"/>
+	</column>
+	<column name="histremark">
+		<type name="varchar" length="30"/>
+	</column>
+	<constraint name="constraint_primary_key" type="pk-constr" table="public.standard_link">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="standard_node" layers="0" collapse-mode="2" max-obj-count="12" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1600" y="-480"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="geom">
+		<type name="geometry" length="0" spatial-type="POINT" variation="0" srid="0"/>
+		<comment> <![CDATA[geometry 정보]]> </comment>
+	</column>
+	<column name="node_id">
+		<type name="varchar" length="10"/>
+		<comment> <![CDATA[노드 아이디]]> </comment>
+	</column>
+	<column name="node_type">
+		<type name="varchar" length="3"/>
+		<comment> <![CDATA[* 노드 종류
+
+- 101 : 교차로
+- 102 : 도로 시.종점
+- 103 : 속성 변화점
+- 104 : 도로시설물
+- 105 : 행정 경계 
+- 106 : 연결로 접속부
+- 107 : IC 및 JC
+]]> </comment>
+	</column>
+	<column name="node_name">
+		<type name="varchar" length="30"/>
+		<comment> <![CDATA[노드 명칭]]> </comment>
+	</column>
+	<column name="turn_p">
+		<type name="varchar" length="1"/>
+		<comment> <![CDATA[* 회전 제한 유무
+
+- 0 : 무
+- 1 : 유
+]]> </comment>
+	</column>
+	<column name="updatedate">
+		<type name="varchar" length="8"/>
+		<comment> <![CDATA[업데이트 날짜 (yyyyMMdd)]]> </comment>
+	</column>
+	<column name="remark">
+		<type name="varchar" length="30"/>
+		<comment> <![CDATA[비고]]> </comment>
+	</column>
+	<column name="hist_type">
+		<type name="varchar" length="8"/>
+	</column>
+	<column name="histremark">
+		<type name="varchar" length="30"/>
+	</column>
+	<constraint name="constraint_primary_key" type="pk-constr" table="public.standard_node">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="bicycle_route_link" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1240" y="-480"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<constraint name="constraint_primary_key" type="pk-constr" table="public.bicycle_route_link">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="bicycle_route_node" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="860" y="-480"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<constraint name="constraint_primary_key" type="pk-constr" table="public.bicycle_route_node">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="bookmark_route" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="860" y="280"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<constraint name="constraint_primary_key" type="pk-constr" table="public.bookmark_route">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="bicycle_node" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1600" y="-180"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<constraint name="constraint_primary_key" type="pk-constr" table="public.bicycle_node">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<genericsql name="MOCT_LINK">
+	<definition> <![CDATA[CREATE TABLE public."MOCT_LINK" (
+	id serial4 NOT NULL,
+	geom public.geometry(multilinestring) NULL,
+	link_id varchar(10) NULL,
+	f_node varchar(10) NULL,
+	t_node varchar(10) NULL,
+	lanes int4 NULL,
+	road_rank varchar(3) NULL,
+	road_type varchar(3) NULL,
+	road_no varchar(5) NULL,
+	road_name varchar(30) NULL,
+	road_use varchar(1) NULL,
+	multi_link varchar(1) NULL,
+	"connect" varchar(3) NULL,
+	max_spd int4 NULL,
+	rest_veh varchar(3) NULL,
+	rest_w int4 NULL,
+	rest_h int4 NULL,
+	"c-its" varchar(1) NULL,
+	length float8 NULL,
+	updatedate varchar(8) NULL,
+	remark varchar(30) NULL,
+	hist_type varchar(8) NULL,
+	histremark varchar(30) NULL,
+	CONSTRAINT "MOCT_LINK_pkey" PRIMARY KEY (id)
+);
+CREATE INDEX "sidx_MOCT_LINK_geom" ON public."MOCT_LINK" USING gist (geom);]]> </definition>
+</genericsql>
+
+<genericsql name="mock_link">
+	<definition> <![CDATA[CREATE TABLE "MOCT_LINK" (
+	id serial4 NOT NULL,
+	geom public.geometry(multilinestring) NULL,
+	link_id varchar(10) NULL,
+	f_node varchar(10) NULL,
+	t_node varchar(10) NULL,
+	lanes int4 NULL,
+	road_rank varchar(3) NULL,
+	road_type varchar(3) NULL,
+	road_no varchar(5) NULL,
+	road_name varchar(30) NULL,
+	road_use varchar(1) NULL,
+	multi_link varchar(1) NULL,
+	"connect" varchar(3) NULL,
+	max_spd int4 NULL,
+	rest_veh varchar(3) NULL,
+	rest_w int4 NULL,
+	rest_h int4 NULL,
+	"c-its" varchar(1) NULL,
+	length float8 NULL,
+	updatedate varchar(8) NULL,
+	remark varchar(30) NULL,
+	hist_type varchar(8) NULL,
+	histremark varchar(30) NULL,
+	CONSTRAINT "MOCT_LINK_pkey" PRIMARY KEY (id)
+);
+CREATE INDEX "sidx_MOCT_LINK_geom" ON public."MOCT_LINK" USING gist (geom);]]> </definition>
+</genericsql>
+
+<genericsql name="new_database">
+	<definition> <![CDATA[CREATE TABLE new_database."MOCT_LINK" (
+	id serial4 NOT NULL,
+	geom public.geometry(multilinestring) NULL,
+	link_id varchar(10) NULL,
+	f_node varchar(10) NULL,
+	t_node varchar(10) NULL,
+	lanes int4 NULL,
+	road_rank varchar(3) NULL,
+	road_type varchar(3) NULL,
+	road_no varchar(5) NULL,
+	road_name varchar(30) NULL,
+	road_use varchar(1) NULL,
+	multi_link varchar(1) NULL,
+	"connect" varchar(3) NULL,
+	max_spd int4 NULL,
+	rest_veh varchar(3) NULL,
+	rest_w int4 NULL,
+	rest_h int4 NULL,
+	"c-its" varchar(1) NULL,
+	length float8 NULL,
+	updatedate varchar(8) NULL,
+	remark varchar(30) NULL,
+	hist_type varchar(8) NULL,
+	histremark varchar(30) NULL,
+	CONSTRAINT "MOCT_LINK_pkey" PRIMARY KEY (id)
+);
+CREATE INDEX "sidx_MOCT_LINK_geom" ON new_database."MOCT_LINK" USING gist (geom);]]> </definition>
+</genericsql>
+
+</dbmodel>
